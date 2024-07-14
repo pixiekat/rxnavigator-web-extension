@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Drug Search</title>
+  <style>
+    body {
+      min-width: 600px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <h1>Drug Search</h1>
+  <input type="text" id="drugName" placeholder="Enter drug name">
+  <button id="fetchDrugs">Fetch Drugs</button>
+  <table id="drugTable">
+    <thead>
+      <tr>
+        <th>Drug Name</th>
+        <th>Color</th>
+        <th>Labeller</th>
+        <th>Label Type</th>
+        <th>RxCUI</th>
+        <th>NDC10</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <script type="text/javascript" src="ntc.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
