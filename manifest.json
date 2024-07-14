@@ -4,7 +4,8 @@
   "version": "1.0",
   "description": "An example Chrome extension to use the rxNorm API to retrive items in Chrome.",
   "permissions": [
-    "activeTab"
+    "activeTab",
+    "storage"
   ],
   "action": {
     "default_popup": "popup.html",
