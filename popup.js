@@ -28,54 +28,57 @@ document.addEventListener('DOMContentLoaded', function() {
             let tty = group.tty;
             if (tty == "SBD" || tty == "SCD") {
               //https://rxnav.nlm.nih.gov/REST/rxcui/${drug.rxcui}/related.json?tty=IN
+              rxcuis = [];
               group.conceptProperties.forEach(drug => {
-                fetch(RX_NAV_BASE_URL + `/ndcproperties.json?id=${drug.rxcui}&ndcstatus=active`)
-                  .then(response => response.json())
-                  .then(data => {
-                    if (data.ndcPropertyList.ndcProperty !== undefined) {
-                      var ndcCodes = [];
-                      data.ndcPropertyList.ndcProperty.forEach(ndcProperty => {
-                        ndcProperty.propertyConceptList.propertyConcept.forEach(propertyConcept => {
-                          if (!ndcCodes.includes(ndcProperty.ndcItem)) {
-                            ndcCodes.push(ndcProperty.ndcItem);
-                            const row = drugTable.insertRow();
-                            const cell1 = row.insertCell(0);
-                            const cell2 = row.insertCell(1);
-                            const cell3 = row.insertCell(2);
-                            const cell4 = row.insertCell(3);
-                            const cell5 = row.insertCell(4);
-                            const cell6 = row.insertCell(5);
+                if (!rxcuis.includes(drug.rxcui)) {
+                  rxcuis.push(drug.rxcui);
+                  fetch(RX_NAV_BASE_URL + `/ndcproperties.json?id=${drug.rxcui}&ndcstatus=active`)
+                    .then(response => response.json())
+                    .then(data => {
+                      if (data.ndcPropertyList.ndcProperty !== undefined) {
+                        var ndcCodes = [];
+                        data.ndcPropertyList.ndcProperty.forEach(ndcProperty => {
+                          ndcProperty.propertyConceptList.propertyConcept.forEach(propertyConcept => {
+                            if (!ndcCodes.includes(ndcProperty.ndcItem)) {
+                              ndcCodes.push(ndcProperty.ndcItem);
+                              const row = drugTable.insertRow();
+                              const cell1 = row.insertCell(0);
+                              const cell2 = row.insertCell(1);
+                              const cell3 = row.insertCell(2);
+                              const cell4 = row.insertCell(3);
+                              const cell5 = row.insertCell(4);
+                              const cell6 = row.insertCell(5);
 
-                            cell1.textContent = drug.name;
-                            if (propertyConcept.propName == "COLORTEXT" && propertyConcept.propValue.length > 0) {
-                              cell2.textContent = propertyConcept.propValue;
-                            }
-                            else if (propertyConcept.propName == "COLOR" && propertyConcept.propValue.length > 0) {
-                              cell2.textContent = propertyConcept.propValue;
-                            }
-                            else {
-                              cell2.textContent = "No Color";
-                            }
+                              cell1.textContent = drug.name;
+                              if (propertyConcept.propName == "COLORTEXT" && propertyConcept.propValue.length > 0) {
+                                cell2.textContent = propertyConcept.propValue;
+                              }
+                              else if (propertyConcept.propName == "COLOR" && propertyConcept.propValue.length > 0) {
+                                cell2.textContent = propertyConcept.propValue;
+                              }
+                              else {
+                                cell2.textContent = "No Color";
+                              }
 
-                            if (propertyConcept.propName == "LABELER") {
-                              cell3.textContent = propertyConcept.propValue;
+                              if (propertyConcept.propName == "LABELER") {
+                                cell3.textContent = propertyConcept.propValue;
+                              }
+
+                              if (propertyConcept.propName == "LABEL_TYPE") {
+                                cell4.textContent = propertyConcept.propValue;
+                              }
+
+                              cell5.textContent = drug.rxcui;
+
+                              cell6.textContent = ndcProperty.ndc10;
                             }
-
-                            if (propertyConcept.propName == "LABEL_TYPE") {
-                              cell4.textContent = propertyConcept.propValue;
-                            }
-
-                            cell5.textContent = drug.rxcui;
-
-                            cell6.textContent = ndcProperty.ndc10;
-                          }
+                            
+                          });
                           
-                        });
-                        
-                      });                    
-                    }
-                  });
-                
+                        });                    
+                      }
+                    });
+                }
               });
             }
           });
