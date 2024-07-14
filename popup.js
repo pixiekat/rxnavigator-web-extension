@@ -30,7 +30,9 @@ document.addEventListener('DOMContentLoaded', function() {
               //https://rxnav.nlm.nih.gov/REST/rxcui/${drug.rxcui}/related.json?tty=IN
               rxcuis = [];
               group.conceptProperties.forEach(drug => {
-                if (!rxcuis.includes(drug.rxcui)) {
+                let tty = drug.tty;
+                let ttyTypes = ['SBD'];
+                if (!rxcuis.includes(drug.rxcui) && ttyTypes.includes(tty)) {
                   rxcuis.push(drug.rxcui);
                   fetch(RX_NAV_BASE_URL + `/ndcproperties.json?id=${drug.rxcui}&ndcstatus=active`)
                     .then(response => response.json())
